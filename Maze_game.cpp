@@ -23,7 +23,7 @@ int z=1;
 
 class Maze{
 	private:
-		char *idk;
+		char *Map;
 		int g1;
 		int g2;
 		int p;
@@ -31,43 +31,43 @@ class Maze{
 		Maze();
 		~Maze();
 		void menu();
-		void setidk(char *);
-		char *getidk();
-		void checkeaten();
-		void checkwin();
-		void addplayer();
-		void sortfile(string);
-		int checkesc();
-		void addghosts();
-		void addgem();
-		void moveghosts();
-		void moveplayer();
+		void setMap(char *);
+		char *getMap();
+		void checkEaten();
+		void checkWin();
+		void addPlayer();
+		void sortFile(string);
+		int checkEsc();
+		void addGhosts();
+		void addGem();
+		void moveGhosts();
+		void movePlayer();
 		void scroll();
 		void display();
-		void addscore(string);
-		void showsb(string);
-		void runfirst();
+		void addScore(string);
+		void showScoreboard(string);
+		void initialRun();
 		void run();
 };
 
 Maze::Maze(){
-	this->idk=new char [size];
+	this->Map=new char [size];
 }
 
 Maze::~Maze(){
-	delete [] this->idk;
+	delete [] this->Map;
 }
 
-void Maze::setidk(char *idk){
-	delete [] this->idk;
-	this->idk=new char [size];
+void Maze::setMap(char *Map){
+	delete [] this->Map;
+	this->Map=new char [size];
 	for (int i=0;i<size;i++){
-		this->idk[i]=idk[i];
+		this->Map[i]=Map[i];
 	}
 }
 
-char *Maze::getidk(){
-	return this->idk;
+char *Maze::getMap(){
+	return this->Map;
 }
 
 void Maze::menu(){
@@ -83,189 +83,189 @@ void Maze::menu(){
 	system("PAUSE");
 }
 
-void Maze::addplayer(){
+void Maze::addPlayer(){
 	int RandIndex = rand() % size;
-	while(this->idk[RandIndex]!=' '){
+	while(this->Map[RandIndex]!=' '){
 		RandIndex = rand() % size;
 	}
 	this->p=RandIndex;
-	this->idk[p]='&';
+	this->Map[p]='&';
 }
 
-void Maze::addghosts(){
+void Maze::addGhosts(){
 	int amount=2;
 	int f=1;
 	while (amount>0){
 		int RandIndex = rand() % size;
-		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->idk[RandIndex]=='*' || this->idk[RandIndex]=='\n' || this->idk[RandIndex]=='@' || this->idk[RandIndex]=='&' || this->idk[RandIndex+1]=='&' || this->idk[RandIndex-1]=='&' || this->idk[RandIndex+coll]=='&' || this->idk[RandIndex-coll]=='&'){
+		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->Map[RandIndex]=='*' || this->Map[RandIndex]=='\n' || this->Map[RandIndex]=='@' || this->Map[RandIndex]=='&' || this->Map[RandIndex+1]=='&' || this->Map[RandIndex-1]=='&' || this->Map[RandIndex+coll]=='&' || this->Map[RandIndex-coll]=='&'){
 			RandIndex = rand() % size;
 		}
 		if (f==1){
 			this->g1=RandIndex;
-			this->idk[g1]='@';
+			this->Map[g1]='@';
 			f=0;
 		}else{
 			this->g2=RandIndex;
-			this->idk[g2]='#';
+			this->Map[g2]='#';
 		}
 		amount-=1;
 	}
 }
 
-void Maze::addgem(){
+void Maze::addGem(){
 	int amount=10;
 	while(amount>0){
 		int RandIndex = rand() % size;
-		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->idk[RandIndex]=='*' || this->idk[RandIndex]=='#' || this->idk[RandIndex]=='@' || this->idk[RandIndex]=='\n' || this->idk[RandIndex]=='^' || this->idk[RandIndex]=='%' || this->idk[RandIndex]=='&' || this->idk[RandIndex]=='#' || this->idk[RandIndex+1]=='&' || this->idk[RandIndex-1]=='&' || this->idk[RandIndex+coll]=='&' || this->idk[RandIndex-coll]=='&'){
+		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->Map[RandIndex]=='*' || this->Map[RandIndex]=='#' || this->Map[RandIndex]=='@' || this->Map[RandIndex]=='\n' || this->Map[RandIndex]=='^' || this->Map[RandIndex]=='%' || this->Map[RandIndex]=='&' || this->Map[RandIndex]=='#' || this->Map[RandIndex+1]=='&' || this->Map[RandIndex-1]=='&' || this->Map[RandIndex+coll]=='&' || this->Map[RandIndex-coll]=='&'){
 			RandIndex = rand() % size;
 		}
-		this->idk[RandIndex]='^';
+		this->Map[RandIndex]='^';
 		amount-=1;
 	}
 }
 
-void Maze::moveghosts(){
+void Maze::moveGhosts(){
 	int RandIndex1 = rand() % 100;
 	if (RandIndex1<=25){
-		if(idk[this->g1+1]!='*' && idk[this->g1+1]!='&' && idk[this->g1+1]!='#' && idk[this->g1+1]!='^' && idk[this->g1+1]!='%'){
-			this->idk[this->g1]=' ';
-			this->idk[this->g1+1]='@';
+		if(Map[this->g1+1]!='*' && Map[this->g1+1]!='&' && Map[this->g1+1]!='#' && Map[this->g1+1]!='^' && Map[this->g1+1]!='%'){
+			this->Map[this->g1]=' ';
+			this->Map[this->g1+1]='@';
 			this->g1+=1;
 		}
-		else if(idk[this->g1+1]=='^' || idk[this->g1+1]=='%'){
-			this->idk[this->g1]=this->idk[this->g1+1];
-			this->idk[this->g1+1]='@';
+		else if(Map[this->g1+1]=='^' || Map[this->g1+1]=='%'){
+			this->Map[this->g1]=this->Map[this->g1+1];
+			this->Map[this->g1+1]='@';
 			this->g1+=1;
 		}
-		else if(idk[this->g1+1]=='&'){
-			this->idk[this->g1+1]='@';
-			this->idk[this->g1]=' ';
+		else if(Map[this->g1+1]=='&'){
+			this->Map[this->g1+1]='@';
+			this->Map[this->g1]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex1>25 and RandIndex1<=50){
-		if(idk[this->g1-1]!='*' && idk[this->g1-1]!='&' && idk[this->g1-1]!='#' && idk[this->g1-1]!='^' && idk[this->g1-1]!='%'){
-			this->idk[this->g1]=' ';
-			this->idk[this->g1-1]='@';
+		if(Map[this->g1-1]!='*' && Map[this->g1-1]!='&' && Map[this->g1-1]!='#' && Map[this->g1-1]!='^' && Map[this->g1-1]!='%'){
+			this->Map[this->g1]=' ';
+			this->Map[this->g1-1]='@';
 			this->g1-=1;
 		}
-		else if(idk[this->g1-1]=='^' || idk[this->g1-1]=='%'){
-			this->idk[this->g1]=this->idk[this->g1-1];
-			this->idk[this->g1-1]='@';
+		else if(Map[this->g1-1]=='^' || Map[this->g1-1]=='%'){
+			this->Map[this->g1]=this->Map[this->g1-1];
+			this->Map[this->g1-1]='@';
 			this->g1-=1;
 		}
-		else if(idk[this->g1-1]=='&'){
-			this->idk[this->g1-1]='@';
-			this->idk[this->g1]=' ';
+		else if(Map[this->g1-1]=='&'){
+			this->Map[this->g1-1]='@';
+			this->Map[this->g1]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex1>50 and RandIndex1<=75){
-		if(idk[this->g1+coll]!='*' && idk[this->g1+coll]!='&' && idk[this->g1+coll]!='#' && idk[this->g1+coll]!='^' && idk[this->g1+coll]!='%'){
-			this->idk[this->g1]=' ';
-			this->idk[this->g1+coll]='@';
+		if(Map[this->g1+coll]!='*' && Map[this->g1+coll]!='&' && Map[this->g1+coll]!='#' && Map[this->g1+coll]!='^' && Map[this->g1+coll]!='%'){
+			this->Map[this->g1]=' ';
+			this->Map[this->g1+coll]='@';
 			this->g1=this->g1+coll;
 		}
-		else if(idk[this->g1+coll]=='^' || idk[this->g1+coll]=='%'){
-			this->idk[this->g1]=this->idk[this->g1+coll];
-			this->idk[this->g1+coll]='@';
+		else if(Map[this->g1+coll]=='^' || Map[this->g1+coll]=='%'){
+			this->Map[this->g1]=this->Map[this->g1+coll];
+			this->Map[this->g1+coll]='@';
 			this->g1=this->g1+coll;
 		}
-		else if(idk[this->g1+coll]=='&'){
-			this->idk[this->g1+coll]='@';
-			this->idk[this->g1]=' ';
+		else if(Map[this->g1+coll]=='&'){
+			this->Map[this->g1+coll]='@';
+			this->Map[this->g1]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex1>75){
-		if(idk[this->g1-coll]!='*' && idk[this->g1-coll]!='&' && idk[this->g1-coll]!='#' && idk[this->g1-coll]!='^' && idk[this->g1-coll]!='%'){
-			this->idk[this->g1]=' ';
-			this->idk[this->g1-coll]='@';
+		if(Map[this->g1-coll]!='*' && Map[this->g1-coll]!='&' && Map[this->g1-coll]!='#' && Map[this->g1-coll]!='^' && Map[this->g1-coll]!='%'){
+			this->Map[this->g1]=' ';
+			this->Map[this->g1-coll]='@';
 			this->g1=this->g1-coll;
 		}
-		else if(idk[this->g1-coll]=='^' || idk[this->g1-coll]=='%'){
-			this->idk[this->g1]=this->idk[this->g1-coll];
-			this->idk[this->g1-coll]='@';
+		else if(Map[this->g1-coll]=='^' || Map[this->g1-coll]=='%'){
+			this->Map[this->g1]=this->Map[this->g1-coll];
+			this->Map[this->g1-coll]='@';
 			this->g1=this->g1-coll;
 		}
-		else if(idk[this->g1-coll]=='&'){
-			this->idk[this->g1-coll]='@';
-			this->idk[this->g1]=' ';
+		else if(Map[this->g1-coll]=='&'){
+			this->Map[this->g1-coll]='@';
+			this->Map[this->g1]=' ';
 			ate=1;
 		}
 	}
 	int RandIndex = rand() % 100;
 	if (RandIndex<=25){
-		if(idk[this->g2+1]!='*' && idk[this->g2+1]!='&' && idk[this->g2+1]!='@' && idk[this->g2+1]!='^' && idk[this->g2+1]!='%'){
-			this->idk[this->g2]=' ';
-			this->idk[this->g2+1]='#';
+		if(Map[this->g2+1]!='*' && Map[this->g2+1]!='&' && Map[this->g2+1]!='@' && Map[this->g2+1]!='^' && Map[this->g2+1]!='%'){
+			this->Map[this->g2]=' ';
+			this->Map[this->g2+1]='#';
 			this->g2+=1;
 		}
-		else if(idk[this->g2+1]=='^' || idk[this->g2+1]=='%'){
-			this->idk[this->g2]=this->idk[this->g2+1];
-			this->idk[this->g2+1]='#';
+		else if(Map[this->g2+1]=='^' || Map[this->g2+1]=='%'){
+			this->Map[this->g2]=this->Map[this->g2+1];
+			this->Map[this->g2+1]='#';
 			this->g2+=1;
 		}
-		else if(idk[this->g2+1]=='&'){
-			this->idk[this->g2+1]='#';
-			this->idk[this->g2]=' ';
+		else if(Map[this->g2+1]=='&'){
+			this->Map[this->g2+1]='#';
+			this->Map[this->g2]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex>25 and RandIndex<=50){
-		if(idk[this->g2-1]!='*' && idk[this->g2-1]!='&' && idk[this->g2-1]!='@' && idk[this->g2-1]!='^' && idk[this->g2-1]!='%'){
-			this->idk[this->g2]=' ';
-			this->idk[this->g2-1]='#';
+		if(Map[this->g2-1]!='*' && Map[this->g2-1]!='&' && Map[this->g2-1]!='@' && Map[this->g2-1]!='^' && Map[this->g2-1]!='%'){
+			this->Map[this->g2]=' ';
+			this->Map[this->g2-1]='#';
 			this->g2-=1;
 		}
-		else if(idk[this->g2-1]=='^' || idk[this->g2-1]=='%'){
-			this->idk[this->g2]=this->idk[this->g2-1];
-			this->idk[this->g2-1]='#';
+		else if(Map[this->g2-1]=='^' || Map[this->g2-1]=='%'){
+			this->Map[this->g2]=this->Map[this->g2-1];
+			this->Map[this->g2-1]='#';
 			this->g2-=1;
 		}
-		else if(idk[this->g2-1]=='&'){
-			this->idk[this->g2-1]='#';
-			this->idk[this->g2]=' ';
+		else if(Map[this->g2-1]=='&'){
+			this->Map[this->g2-1]='#';
+			this->Map[this->g2]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex>50 and RandIndex<=75){
-		if(idk[this->g2+coll]!='*' && idk[this->g2+coll]!='&' && idk[this->g2+coll]!='@' && idk[this->g2+coll]!='^' && idk[this->g2+coll]!='%'){
-			this->idk[this->g2]=' ';
-			this->idk[this->g2+coll]='#';
+		if(Map[this->g2+coll]!='*' && Map[this->g2+coll]!='&' && Map[this->g2+coll]!='@' && Map[this->g2+coll]!='^' && Map[this->g2+coll]!='%'){
+			this->Map[this->g2]=' ';
+			this->Map[this->g2+coll]='#';
 			this->g2=this->g2+coll;
 		}
-		else if(idk[this->g2+coll] =='^' || idk[this->g2+coll] =='%'){
-			this->idk[this->g2]=this->idk[this->g2+coll];
-			this->idk[this->g2+coll]='#';
+		else if(Map[this->g2+coll] =='^' || Map[this->g2+coll] =='%'){
+			this->Map[this->g2]=this->Map[this->g2+coll];
+			this->Map[this->g2+coll]='#';
 			this->g2=this->g2+coll;
 		}
-		else if(idk[this->g2+coll]=='&'){
-			this->idk[this->g2+coll]='#';
-			this->idk[this->g2]=' ';
+		else if(Map[this->g2+coll]=='&'){
+			this->Map[this->g2+coll]='#';
+			this->Map[this->g2]=' ';
 			ate=1;
 		}
 	}
 	else if(RandIndex>75){
-		if(idk[this->g2-coll]!='*' && idk[this->g2-coll]!='&' && idk[this->g2-coll]!='@' && idk[this->g2-coll]!='^' && idk[this->g2-coll]!='%'){
-			this->idk[this->g2]=' ';
-			this->idk[this->g2-coll]='#';
+		if(Map[this->g2-coll]!='*' && Map[this->g2-coll]!='&' && Map[this->g2-coll]!='@' && Map[this->g2-coll]!='^' && Map[this->g2-coll]!='%'){
+			this->Map[this->g2]=' ';
+			this->Map[this->g2-coll]='#';
 			this->g2=this->g2-coll;
 		}
-		else if(idk[this->g2-coll]=='^' || idk[this->g2-coll]=='%'){
-			this->idk[this->g2]=this->idk[this->g2-coll];
-			this->idk[this->g2-coll]='#';
+		else if(Map[this->g2-coll]=='^' || Map[this->g2-coll]=='%'){
+			this->Map[this->g2]=this->Map[this->g2-coll];
+			this->Map[this->g2-coll]='#';
 			this->g2=this->g2-coll;
 		}
-		else if(idk[this->g2-coll]=='&'){
-			this->idk[this->g2-coll]='#';
-			this->idk[this->g2]=' ';
+		else if(Map[this->g2-coll]=='&'){
+			this->Map[this->g2-coll]='#';
+			this->Map[this->g2]=' ';
 			ate=1;
 		}
 	}
 }
 
-void Maze::moveplayer(){
+void Maze::movePlayer(){
 	int ch;
 	ch = getch ();
 	if(ch=='\e'){
@@ -275,98 +275,98 @@ void Maze::moveplayer(){
 		ch = getch();
 		switch(ch){
 			case 72:
-				if (idk[p-coll]==' '){
-					this->idk[p]=' ';
-					this->idk[p-coll]='&';
+				if (Map[p-coll]==' '){
+					this->Map[p]=' ';
+					this->Map[p-coll]='&';
 					this->p=p-coll;
 				}
-				else if(idk[p-coll]=='^'){
-					this->idk[p]=' ';
-					this->idk[p-coll]='&';
+				else if(Map[p-coll]=='^'){
+					this->Map[p]=' ';
+					this->Map[p-coll]='&';
 					this->p=p-coll;
 					gems-=1;
 					points+=10;
 				}
-				else if(idk[p-coll]=='%'){
-					this->idk[p]=' ';
-					this->idk[p-coll]='&';
+				else if(Map[p-coll]=='%'){
+					this->Map[p]=' ';
+					this->Map[p-coll]='&';
 					win=1;
 					points+=100;
 				}
-				else if(idk[p-coll]=='#' || idk[p-coll]=='@'){
-					this->idk[p]=' ';
+				else if(Map[p-coll]=='#' || Map[p-coll]=='@'){
+					this->Map[p]=' ';
 					ate=1;
 				}
 				break;
 			case 80:
-				if (idk[p+coll]==' '){
-					this->idk[p]=' ';
-					this->idk[p+coll]='&';
+				if (Map[p+coll]==' '){
+					this->Map[p]=' ';
+					this->Map[p+coll]='&';
 					this->p=p+coll;
 				}
-				else if(idk[p+coll]=='^'){
-					this->idk[p]=' ';
-					this->idk[p+coll]='&';
+				else if(Map[p+coll]=='^'){
+					this->Map[p]=' ';
+					this->Map[p+coll]='&';
 					this->p=p+coll;
 					gems-=1;
 					points+=10;
 				}
-				else if(idk[p+coll]=='%'){
-					this->idk[p]=' ';
-					this->idk[p+coll]='&';
+				else if(Map[p+coll]=='%'){
+					this->Map[p]=' ';
+					this->Map[p+coll]='&';
 					win=1;
 					points+=100;
 				}
-				else if(idk[p+coll]=='#' || idk[p+coll]=='@'){
-					this->idk[p]=' ';
+				else if(Map[p+coll]=='#' || Map[p+coll]=='@'){
+					this->Map[p]=' ';
 					ate=1;
 				}
 				break;
 			case 75:
-				if (idk[p-1]==' '){
-					this->idk[p]=' ';
-					this->idk[p-1]='&';
+				if (Map[p-1]==' '){
+					this->Map[p]=' ';
+					this->Map[p-1]='&';
 					this->p=p-1;
 				}
-				else if(idk[p-1]=='^'){
-					this->idk[p]=' ';
-					this->idk[p-1]='&';
+				else if(Map[p-1]=='^'){
+					this->Map[p]=' ';
+					this->Map[p-1]='&';
 					this->p=p-1;
 					gems-=1;
 					points+=10;
 				}
-				else if(idk[p-1]=='%'){
-					this->idk[p]=' ';
-					this->idk[p-1]='&';
+				else if(Map[p-1]=='%'){
+					this->Map[p]=' ';
+					this->Map[p-1]='&';
 					win=1;
 					points+=100;
 				}
-				else if(idk[p-1]=='#' || idk[p-1]=='@'){
-					this->idk[p]=' ';
+				else if(Map[p-1]=='#' || Map[p-1]=='@'){
+					this->Map[p]=' ';
 					ate=1;
 				}
 				break;
 			case 77:
-				if (idk[p+1]==' '){
-					this->idk[p]=' ';
-					this->idk[p+1]='&';
+				if (Map[p+1]==' '){
+					this->Map[p]=' ';
+					this->Map[p+1]='&';
 					this->p=p+1;
 				}
-				else if(idk[p+1]=='^'){
-					this->idk[p]=' ';
-					this->idk[p+1]='&';
+				else if(Map[p+1]=='^'){
+					this->Map[p]=' ';
+					this->Map[p+1]='&';
 					this->p=p+1;
 					gems-=1;
 					points+=10;
 				}
-				else if(idk[p+1]=='%'){
-					this->idk[p]=' ';
-					this->idk[p+1]='&';
+				else if(Map[p+1]=='%'){
+					this->Map[p]=' ';
+					this->Map[p+1]='&';
 					win=1;
 					points+=100;
 				}
-				else if(idk[p+1]=='#' || idk[p+1]=='@'){
-					this->idk[p]=' ';
+				else if(Map[p+1]=='#' || Map[p+1]=='@'){
+					this->Map[p]=' ';
 					ate=1;
 				}
 				break;
@@ -377,15 +377,15 @@ void Maze::moveplayer(){
 void Maze::scroll(){
 	if(gems==0 && flag == 0){
 		int RandIndex = rand() % size;
-		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->idk[RandIndex]=='*' || this->idk[RandIndex]=='\n' || this->idk[RandIndex]=='^' || this->idk[RandIndex]=='%' || this->idk[RandIndex]=='&' || this->idk[RandIndex]=='#' || this->idk[RandIndex+1]=='&' || this->idk[RandIndex-1]=='&' || this->idk[RandIndex+coll]=='&' || this->idk[RandIndex-coll]=='&'){
+		while (RandIndex<coll+1 || RandIndex>(size-coll-1) || this->Map[RandIndex]=='*' || this->Map[RandIndex]=='\n' || this->Map[RandIndex]=='^' || this->Map[RandIndex]=='%' || this->Map[RandIndex]=='&' || this->Map[RandIndex]=='#' || this->Map[RandIndex+1]=='&' || this->Map[RandIndex-1]=='&' || this->Map[RandIndex+coll]=='&' || this->Map[RandIndex-coll]=='&'){
 			RandIndex = rand() % size;
 		}
-		this->idk[RandIndex]='%';
+		this->Map[RandIndex]='%';
 		flag=1;
 	}
 }
 
-void Maze::checkwin(){
+void Maze::checkWin(){
 	if(win==1){
 		cout << flush;
 		system("CLS");
@@ -402,13 +402,13 @@ void Maze::display(){
 	cout << flush;
 	system("CLS");
 	for(int i=0;i<size;i++){
-		cout << this->idk[i];
+		cout << this->Map[i];
 	}
 	cout << '\n';
 }
 
 
-void Maze::checkeaten(){
+void Maze::checkEaten(){
 	if(ate==1){
 		cout << flush;
 		system("CLS");
@@ -421,7 +421,7 @@ void Maze::checkeaten(){
 	}
 }
 
-int Maze::checkesc(){
+int Maze::checkEsc(){
 	if(esc==1){
 		printf("Hope we won't see you next semester\n");
 		system("PAUSE");
@@ -432,7 +432,7 @@ int Maze::checkesc(){
 	}
 }
 
-void Maze::addscore(string scorename){
+void Maze::addScore(string scoreName){
 	string username;
 	cout << "Enter your Name (10 characters max):";
 	cin >> username;
@@ -441,18 +441,18 @@ void Maze::addscore(string scorename){
 		cout << "Enter name :";
 		cin >> username;
 	}
-	ofstream sb (scorename.c_str(),ios_base::app);
+	ofstream sb (scoreName.c_str(),ios_base::app);
 	sb << username << points << endl ;
 	sb.close();
 }
 
-void Maze::showsb(string scorename){
+void Maze::showScoreboard(string scoreName){
 	char c;
 	string file[5],line;
 	int j=0,q;
 	cout << flush;
 	system("CLS");
-	ifstream sb (scorename.c_str());
+	ifstream sb (scoreName.c_str());
 	if (sb.is_open()){
 		cout << "High score Board" << endl << endl;
 		while(!(sb.eof() || j==5)){
@@ -479,12 +479,12 @@ void Maze::showsb(string scorename){
 	}
 }
 
-void Maze::sortfile(string scorename){
+void Maze::sortFile(string scoreName){
 	string file[6];
 	int file2[6]={0,0,0,0,0,0};
 	string line,temp;
 	int i=0,j,k,p,temp1;
-		ifstream sb(scorename.c_str());
+		ifstream sb(scoreName.c_str());
 	while (getline(sb,line) && i<6) {
 		k=0;
 		p=0;
@@ -505,7 +505,7 @@ void Maze::sortfile(string scorename){
 	    i++;
 	}
 	sb.close();
-	ofstream sb1(scorename.c_str());
+	ofstream sb1(scoreName.c_str());
     for (i = 0; i < 5; i++){
 	    for (j = 0; j < 5-i; j++){
 	        if (file2[j] < file2[j+1] ){
@@ -524,31 +524,31 @@ void Maze::sortfile(string scorename){
 	sb1.close();
 }
 
-void Maze::runfirst(){
-	this->addplayer();
-	this->addghosts();
-	this->addgem();
+void Maze::initialRun(){
+	this->addPlayer();
+	this->addGhosts();
+	this->addGem();
 }
 	
 void Maze::run(){
 	this->display();
-	this->moveplayer();
-	this->moveghosts();
+	this->movePlayer();
+	this->moveGhosts();
 	this->scroll();
-	this->checkeaten();
-	this->checkwin();
+	this->checkEaten();
+	this->checkWin();
 }
 
 int main(int argc, char *argv[]){
 	string line;
-	string fileName,scorename;;
+	string fileName,scoreName;;
 	srand(time(0));
 	char c;
-	char *pin;
+	char *fileMap;
 	fileName = argv[1];
 	fileName += ".txt";
-	scorename = argv[2];
-	scorename += ".txt";
+	scoreName = argv[2];
+	scoreName += ".txt";
 	ifstream maze (fileName.c_str());
 	if (maze.is_open()) {
 		maze.get(c);
@@ -556,7 +556,7 @@ int main(int argc, char *argv[]){
 	    	if (c != '*' && c != ' ' && c != '\n'){
 				cout << "Invalid character :" << c <<endl;
 	    		cout << "maze must only has stars and spaces \n";
-	    		cout << scorename.c_str();
+	    		cout << scoreName.c_str();
 	    		system("PAUSE");
 	    		exit(1);
 			}
@@ -578,54 +578,54 @@ int main(int argc, char *argv[]){
 	    size=rows*coll-1;
 	    maze.clear();
 	    maze.seekg(0);
-	    pin=new char[size];
+	    fileMap=new char[size];
 	    for (int i=0;i<size;i++) {
 			maze.get(c);
-			pin[i]=c;
+			fileMap[i]=c;
 	    }
 		maze.close();
-		ifstream scorebo (scorename.c_str());
+		ifstream scorebo (scoreName.c_str());
 		if (scorebo.is_open()) {
 			Maze maze;
-			while(maze.checkesc()){
+			while(maze.checkEsc()){
 				maze.menu();
-				maze.setidk(pin);
-				maze.runfirst();
+				maze.setMap(fileMap);
+				maze.initialRun();
 				z=1;
 				ate=0;
 				win=0;
 				flag=0;
 				gems=10;
 				points=0;
-				while(z && maze.checkesc()){
+				while(z && maze.checkEsc()){
 					maze.run();
 				}
-		  		maze.addscore(scorename);
-		  		maze.sortfile(scorename);
-				maze.showsb(scorename);
+		  		maze.addScore(scoreName);
+		  		maze.sortFile(scoreName);
+				maze.showScoreboard(scoreName);
 			}
 	  		scorebo.close();
 		}
 		else{
 			Maze maze;
-			maze.setidk(pin);
+			maze.setMap(fileMap);
 			printf("Error no score board found");
-			while(maze.checkesc()){
+			while(maze.checkEsc()){
 				maze.menu();
-				maze.setidk(pin);
-				maze.runfirst();
+				maze.setMap(fileMap);
+				maze.initialRun();
 				z=1;
 				ate=0;
 				win=0;
 				flag=0;
 				gems=10;
 				points=0;
-				while(z && maze.checkesc()){
+				while(z && maze.checkEsc()){
 					maze.run();
 				}
 			}
 		}
-		delete [] pin;
+		delete [] fileMap;
 	}
 	return 0;
 }
